@@ -23,12 +23,12 @@
 
             <div class="flex flex-col mb-5">
                 <x-input-label>STOCK_CODE</x-input-label>
-                <x-text-input name="stockCode"></x-text-input>
+                <x-text-input name="stockCode" required></x-text-input>
             </div>
 
             <div class="flex flex-col mb-5">
                 <x-input-label>DESCRIPTION</x-input-label>
-                <x-text-input name="description"></x-text-input>
+                <x-text-input name="description" required></x-text-input>
             </div>
 
             <div class="flex">

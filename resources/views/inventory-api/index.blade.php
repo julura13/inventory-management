@@ -1,5 +1,12 @@
 <x-guest-layout>
+
     <div class="flex flex-col">
+            @if (session('success'))
+                <div class="">
+                    Something
+                    {{ session('success') }}
+                </div>
+            @endif
 
         <div class="flex mb-5">
             <h2 class="text-2xl w-full">Inventory management</h2>
@@ -12,7 +19,7 @@
 
         <div class="">
             <form action="{{ route('api.index') }}" method="get" class="flex">
-                @csrf
+
                 <x-text-input name="search" class="w-4/5">
 
                 </x-text-input>
@@ -20,7 +27,7 @@
                 <x-primary-button type="submit" class="ml-2">Search</x-primary-button>
 
                 <a href="/">
-                    <x-secondary-button class="ml-2 py-2">Clear</x-secondary-button>
+                    <x-secondary-button class="ml-2 !py-4">Clear</x-secondary-button>
                 </a>
             </form>
 
@@ -44,7 +51,11 @@
                     <tr>
                         <td class="border p-2">{{ $product['STOCK_CODE'] }}</td>
                         <td class="border p-2">{{ $product['DESCRIPTION'] }}</td>
-                        <td class="border p-2"></td>
+                        <td class="border p-2">
+
+
+
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>
