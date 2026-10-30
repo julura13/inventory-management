@@ -1,10 +1,9 @@
 <x-guest-layout>
 
     <div class="flex flex-col">
-            @if (session('success'))
+            @if (session('message'))
                 <div class="">
-                    Something
-                    {{ session('success') }}
+                    {{ session('message') }}
                 </div>
             @endif
 
@@ -51,9 +50,19 @@
                     <tr>
                         <td class="border p-2">{{ $product['STOCK_CODE'] }}</td>
                         <td class="border p-2">{{ $product['DESCRIPTION'] }}</td>
-                        <td class="border p-2">
+                        <td class="border p-2 flex">
 
+                            <x-product-edit-modal stock-code="{{ $product['STOCK_CODE'] }}"
+                                                  description="{{ $product['DESCRIPTION'] }}">Edit</x-product-edit-modal>
 
+                            <form action="{{ route('api.destroy') }}" method="post">
+                                @csrf
+                                @method('DELETE')
+
+                                <input type="hidden" value="{{ $product['STOCK_CODE'] }}" name="stockCode">
+
+                                <x-danger-button class="!py-4 ml-2" type="submit">Delete</x-danger-button>
+                            </form>
 
                         </td>
                     </tr>

@@ -23,10 +23,14 @@ class ApiController extends Controller
                 'ITEM' => $search,
             ]);
 
-            $products = $response->json();
+            if($response->body() !== '{"result":"NO RECORDS"}')
+            {
+                $products = $response->json();
+            }
         }
 
-        return view('inventory-api.index')->with('products', $products);
+        return view('inventory-api.index')
+            ->with('products', $products);
     }
 
     /**
@@ -38,6 +42,8 @@ class ApiController extends Controller
             'stockCode' => 'required|max:255',
             'description' => 'required|max:255',
         ]);
+
+        $message = 'An error occurred while trying to add the product.';
 
         $response = Http::asForm()->post($this->URL, [
             'STOCK_CODE' => $request->stockCode,
@@ -53,11 +59,47 @@ class ApiController extends Controller
                 $message = 'Product added successfully';
             }
 
-            $message = 'An error occurred while trying to add the product.';
         }
 
-        return redirect()->route('api.index')->with('message', $message);
+        return redirect()->route('api.index', ['search' => $request->stockCode])->with('message', $message);
 
+    }
 
+    public function update(Request $request)
+    {
+        $request->validate([
+            'description' => 'required|max:255',
+        ]);
+
+        $message = 'An error occurred while trying to add the product.';
+
+        $response = Http::asForm()->put($this->URL, [
+            'STOCK_CODE' => $request->stockCode,
+            'DESCRIPTION' => $request->description,
+        ]);
+
+        if ($response->successful()) {
+            $verifyProduct = Http::get("$this->URL?ITEM=", [
+                'ITEM' => $request->stockCode,
+            ]);
+
+            if ($verifyProduct->successful() && count($verifyProduct->json()) > 0) {
+                $message = 'Product added successfully';
+            }
+        }
+
+        return redirect()->route('api.index', ['search' => $request->stockCode])->with('message', $message);
+
+    }
+
+    public function destroy(Request $request)
+    {
+        $request->validate(['stockCode' => 'required|max:255']);
+
+        $response = Http::asForm()->delete($this->URL, [
+            'STOCK_CODE' => $request->stockCode,
+        ]);
+
+        return redirect()->route('api.index', ['search' => $request->stockCode]);
     }
 }
