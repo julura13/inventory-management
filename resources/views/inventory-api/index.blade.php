@@ -2,7 +2,7 @@
 
     <div class="flex flex-col">
             @if (session('message'))
-                <div class="">
+                <div class="text-red-300 font-bold">
                     {{ session('message') }}
                 </div>
             @endif
